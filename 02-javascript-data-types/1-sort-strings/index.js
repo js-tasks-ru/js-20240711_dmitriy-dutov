@@ -4,27 +4,15 @@
  * @param {string} [param="asc"] param - the sorting type "asc" or "desc"
  * @returns {string[]}
  */
+
 export function sortStrings(arr, param = 'asc') {
-  // Создаем копию массива
-  const newArr = [...arr];
-  
-  // Флаг для сортировки в обратном порядке
+  const sortedArr = [...arr];
   const isDescending = param === 'desc';
 
-  // Сортируем массив
-  newArr.sort((a, b) => {
-    // Используем localeCompare с учетом локали и регистра
-    const comparison = a.localeCompare(b, ['ru', 'en'], { sensitivity: 'case', ignorePunctuation: true });
-
-    // Если первый символ строки a и b одинаковы в сравнении, проверяем регистр первого символа
-    if (a[0].toUpperCase() === b[0].toUpperCase() && a[0] !== b[0]) {
-      return a[0] < b[0] ? -1 : 1;
-    }
-
-    // Если нужно сортировать в обратном порядке, инвертируем результат
-    return isDescending ? -comparison : comparison;
+  return sortedArr.sort((a, b) => {
+    const result = a.localeCompare(b, ['ru', 'en'], { sensitivity: 'variant', caseFirst: 'upper' });
+    return !isDescending ? result : -result;
   });
-
-  return newArr;
 }
+
 
