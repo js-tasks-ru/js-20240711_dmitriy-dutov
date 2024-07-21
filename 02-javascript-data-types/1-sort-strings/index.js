@@ -13,12 +13,13 @@ export function sortStrings(arr, param = 'asc') {
 
   // Сортируем массив
   newArr.sort((a, b) => {
-    // Сначала проверяем регистр
-    if (a[0].toUpperCase() === a[0] && b[0].toUpperCase() !== b[0]) return -1;
-    if (a[0].toUpperCase() !== a[0] && b[0].toUpperCase() === b[0]) return 1;
-
     // Используем localeCompare с учетом локали и регистра
-    const comparison = a.localeCompare(b, undefined, { sensitivity: 'case', ignorePunctuation: true });
+    const comparison = a.localeCompare(b, ['ru', 'en'], { sensitivity: 'case', ignorePunctuation: true });
+
+    // Если первый символ строки a и b одинаковы в сравнении, проверяем регистр первого символа
+    if (a[0].toUpperCase() === b[0].toUpperCase() && a[0] !== b[0]) {
+      return a[0] < b[0] ? -1 : 1;
+    }
 
     // Если нужно сортировать в обратном порядке, инвертируем результат
     return isDescending ? -comparison : comparison;
