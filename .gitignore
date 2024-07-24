@@ -138,6 +138,8 @@ teacher.karma.conf.js
 # dotenv environment variables file
 .env
 
+.vs
+
 .DS_Store
 .vscode
 

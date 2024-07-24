@@ -6,4 +6,13 @@
  */
 export const omit = (obj, ...fields) => {
 
+  let result = {};
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (!fields.includes(key)) {
+      result[key] = value;
+    }
+  });
+
+  return result;
 };
