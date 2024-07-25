@@ -4,5 +4,16 @@
  * @returns {object | undefined} - returns new object or undefined if nothing did't pass
  */
 export function invertObj(obj) {
+  if (obj === undefined) return undefined;
+  if (typeof obj !== 'object' || obj === null) {
+    throw new TypeError('Argument should be an object');
+  }
 
+  const entries = Object.entries(obj);
+  const invertedObj = entries.reduce((accumulator, [key, value]) => {
+    accumulator[value] = key;
+    return accumulator;
+  }, {});
+
+  return invertedObj;
 }
