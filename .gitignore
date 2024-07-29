@@ -120,6 +120,7 @@ typings/
 
 results
 loadaws.js
+sandbox.js
 
 # Optional eslint cache
 .eslintcache

@@ -8,7 +8,7 @@ export function createGetter(path) {
 
   return function(obj) {
     return fields.reduce((accumulator, currentField) => {
-      if (accumulator === undefined || !accumulator.hasOwnProperty(currentField)) {
+      if (accumulator === null || accumulator === undefined || !accumulator?.hasOwnProperty(currentField)) {
         return undefined;
       }
       return accumulator[currentField];
