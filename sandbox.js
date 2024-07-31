@@ -323,71 +323,99 @@ function alert(str) {
 
 // console.log(invertObj(obj)); // { value: 'key'}
 
-export default class NotificationMessage {
-  // статическое поле общее для всех классов
-  static activeNotification;
+// export default class NotificationMessage {
+//   // статическое поле общее для всех классов
+//   static activeNotification;
 
-  // в конструктор передётся message + объект с полями duration и type
-  constructor(message, {
-    duration = 2000,
-    type = 'success',
-  } = {}) {
-    // проверка поля activeNotification на существование
-    if (NotificationMessage.activeNotification) {
-      NotificationMessage.activeNotification.remove();
-    }
+//   // в конструктор передётся message + объект с полями duration и type
+//   constructor(message, {
+//     duration = 2000,
+//     type = 'success',
+//   } = {}) {
+//     // проверка поля activeNotification на существование
+//     if (NotificationMessage.activeNotification) {
+//       NotificationMessage.activeNotification.remove();
+//     }
 
-    // создаём и заполняем новые поля
-    this.message = message;
-    this.durationInSeconds = (duration / 1000) + 's';
-    this.type = type;
-    this.duration = duration;
+//     // создаём и заполняем новые поля
+//     this.message = message;
+//     this.durationInSeconds = (duration / 1000) + 's';
+//     this.type = type;
+//     this.duration = duration;
 
-    // вызываем метод render
-    this.render();
-  }
+//     // вызываем метод render
+//     this.render();
+//   }
 
-  get template() {
-    return `<div class="notification ${this.type}" style="--value:${this.durationInSeconds}">
-      <div class="timer"></div>
-      <div class="inner-wrapper">
-        <div class="notification-header">Notification</div>
-        <div class="notification-body">
-          ${this.message}
-        </div>
-      </div>
-    </div>`;
-  }
+//   get template() {
+//     return `<div class="notification ${this.type}" style="--value:${this.durationInSeconds}">
+//       <div class="timer"></div>
+//       <div class="inner-wrapper">
+//         <div class="notification-header">Notification</div>
+//         <div class="notification-body">
+//           ${this.message}
+//         </div>
+//       </div>
+//     </div>`;
+//   }
 
-  render() {
+//   render() {
+//     const element = document.createElement('div');
+
+//     //  строка в которой результат от template
+//     element.innerHTML = this.template;
+
+//     this.element = element.firstElementChild;
+
+//     // в наш класс в статичное поле добавляем значение
+//     NotificationMessage.activeNotification = this.element;
+//   }
+
+//   show(parent = document.body) {
+//     parent.append(this.element);
+
+//     setTimeout(() => {
+//       this.remove();
+//     }, this.duration);
+//   }
+
+//   remove() {
+//     if (this.element) {
+//       this.element.remove();
+//     }
+//   }
+
+//   destroy() {
+//     this.remove();
+//     this.element = null;
+//     NotificationMessage.activeNotification = null;
+//   }
+// }
+
+export default class SortableTable {
+  constructor(headerConfig = [], data = []) {
+    this.headerConfig = [...headerConfig];
+    this.data = [...data];
+
     const element = document.createElement('div');
-
-    //  строка в которой результат от template
-    element.innerHTML = this.template;
-
-    this.element = element.firstElementChild;
-
-    // в наш класс в статичное поле добавляем значение
-    NotificationMessage.activeNotification = this.element;
+    element.innerHTML = this.createTemplate();
   }
 
-  show(parent = document.body) {
-    parent.append(this.element);
+  createTemplate() {
+    return `<div data-element="productsContainer" class="products-list__container">
+      <div class="sortable-table">
 
-    setTimeout(() => {
-      this.remove();
-    }, this.duration);
+        <div data-element="header" class="sortable-table__header sortable-table__row">
+          ${this.createHeades}
+        </div>`;
   }
 
-  remove() {
-    if (this.element) {
-      this.element.remove();
-    }
-  }
-
-  destroy() {
-    this.remove();
-    this.element = null;
-    NotificationMessage.activeNotification = null;
+  createHeades() {
+    return this.headerConfig.map(({id, title, sortableTable, sortType}) => 
+      ` <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortableTable}" data-order="${sortType}">
+        <span>${title}</span>
+      </div>`);
   }
 }
+
+
