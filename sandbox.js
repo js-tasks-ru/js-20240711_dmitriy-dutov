@@ -299,26 +299,123 @@ function alert(str) {
 //   };
 // }
 
-// --ДЗ 2
-function invertObj(obj) {
-  // Проверяем, что переданный аргумент является объектом
-  if (typeof obj !== 'object' || obj === null) {
-    throw new TypeError('Argument should be an object');
+// // --ДЗ 2
+// function invertObj(obj) {
+//   // Проверяем, что переданный аргумент является объектом
+//   if (typeof obj !== 'object' || obj === null) {
+//     throw new TypeError('Argument should be an object');
+//   }
+
+//   // Используем Object.entries для получения массива пар [ключ, значение]
+//   const entries = Object.entries(obj);
+
+//   // Создаем новый объект, используя reduce для изменения ключей и значений местами
+//   const invertedObj = entries.reduce((accumulator, [key, value]) => {
+//     accumulator[value] = key;
+//     return accumulator;
+//   }, {});
+
+//   return invertedObj;
+// }
+
+// // Пример использования
+// const obj = { key: 'value' };
+
+// console.log(invertObj(obj)); // { value: 'key'}
+
+// export default class NotificationMessage {
+//   // статическое поле общее для всех классов
+//   static activeNotification;
+
+//   // в конструктор передётся message + объект с полями duration и type
+//   constructor(message, {
+//     duration = 2000,
+//     type = 'success',
+//   } = {}) {
+//     // проверка поля activeNotification на существование
+//     if (NotificationMessage.activeNotification) {
+//       NotificationMessage.activeNotification.remove();
+//     }
+
+//     // создаём и заполняем новые поля
+//     this.message = message;
+//     this.durationInSeconds = (duration / 1000) + 's';
+//     this.type = type;
+//     this.duration = duration;
+
+//     // вызываем метод render
+//     this.render();
+//   }
+
+//   get template() {
+//     return `<div class="notification ${this.type}" style="--value:${this.durationInSeconds}">
+//       <div class="timer"></div>
+//       <div class="inner-wrapper">
+//         <div class="notification-header">Notification</div>
+//         <div class="notification-body">
+//           ${this.message}
+//         </div>
+//       </div>
+//     </div>`;
+//   }
+
+//   render() {
+//     const element = document.createElement('div');
+
+//     //  строка в которой результат от template
+//     element.innerHTML = this.template;
+
+//     this.element = element.firstElementChild;
+
+//     // в наш класс в статичное поле добавляем значение
+//     NotificationMessage.activeNotification = this.element;
+//   }
+
+//   show(parent = document.body) {
+//     parent.append(this.element);
+
+//     setTimeout(() => {
+//       this.remove();
+//     }, this.duration);
+//   }
+
+//   remove() {
+//     if (this.element) {
+//       this.element.remove();
+//     }
+//   }
+
+//   destroy() {
+//     this.remove();
+//     this.element = null;
+//     NotificationMessage.activeNotification = null;
+//   }
+// }
+
+export default class SortableTable {
+  constructor(headerConfig = [], data = []) {
+    this.headerConfig = [...headerConfig];
+    this.data = [...data];
+
+    const element = document.createElement('div');
+    element.innerHTML = this.createTemplate();
   }
 
-  // Используем Object.entries для получения массива пар [ключ, значение]
-  const entries = Object.entries(obj);
+  createTemplate() {
+    return `<div data-element="productsContainer" class="products-list__container">
+      <div class="sortable-table">
 
-  // Создаем новый объект, используя reduce для изменения ключей и значений местами
-  const invertedObj = entries.reduce((accumulator, [key, value]) => {
-    accumulator[value] = key;
-    return accumulator;
-  }, {});
+        <div data-element="header" class="sortable-table__header sortable-table__row">
+          ${this.createHeades}
+        </div>`;
+  }
 
-  return invertedObj;
+  createHeades() {
+    return this.headerConfig.map(({id, title, sortableTable, sortType}) => 
+      ` <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortableTable}" data-order="${sortType}">
+        <span>${title}</span>
+      </div>`);
+  }
 }
 
-// Пример использования
-const obj = { key: 'value' };
 
-console.log(invertObj(obj)); // { value: 'key'}

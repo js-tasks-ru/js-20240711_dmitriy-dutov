@@ -1,27 +1,31 @@
 export default class NotificationMessage {
-  static activeNotification;
+  static hasMessage;
 
-  constructor(message, {
-    duration = 2000,
-    type = 'success',
-  } = {}) {
-    if (NotificationMessage.activeNotification) {
-      NotificationMessage.activeNotification.remove();
+  constructor(message,
+    {
+      duration = 1000,
+      type = 'success',
+    } = {}) {
+    if (NotificationMessage.hasMessage) {
+      NotificationMessage.hasMessage.remove();
     }
 
     this.message = message;
-    this.durationInSeconds = (duration / 1000) + 's';
-    this.type = type;
     this.duration = duration;
+    this.type = type;
 
-    this.render();
+    const element = document.createElement('div');
+    element.innerHTML = this.createTemplate();
+
+    this.element = element.firstElementChild;
+    NotificationMessage.activeNotification = this.element;
   }
 
-  get template() {
-    return `<div class="notification ${this.type}" style="--value:${this.durationInSeconds}">
+  createTemplate() {
+    return `<div class="notification ${this.type}" style="--value:${this.duration / 1000}s">
       <div class="timer"></div>
       <div class="inner-wrapper">
-        <div class="notification-header">Notification</div>
+        <div class="notification-header">success</div>
         <div class="notification-body">
           ${this.message}
         </div>
@@ -29,18 +33,8 @@ export default class NotificationMessage {
     </div>`;
   }
 
-  render() {
-    const element = document.createElement('div');
-
-    element.innerHTML = this.template;
-
-    this.element = element.firstElementChild;
-
-    NotificationMessage.activeNotification = this.element;
-  }
-
   show(parent = document.body) {
-    parent.append(this.element);
+    parent.append(this.element);    
 
     setTimeout(() => {
       this.remove();
@@ -56,6 +50,8 @@ export default class NotificationMessage {
   destroy() {
     this.remove();
     this.element = null;
-    NotificationMessage.activeNotification = null;
+    NotificationMessage.hasMessage = null;
   }
 }
+
+
